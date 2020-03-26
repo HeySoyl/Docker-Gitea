@@ -12,7 +12,7 @@ services:
       - USER_GID=1000
     restart: always
     networks:
-      - gitea
+      - bridge
     volumes:
       - /docker/gitea/gitea:/data
     ports:
@@ -37,7 +37,7 @@ services:
       - DB_EXTENSION=pg_trgm
     restart: always
     networks:
-      - gitea
+      - bridge
     volumes:
       - /docker/gitea/postgresql:/var/lib/postgresql
     ports:
