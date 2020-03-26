@@ -1,0 +1,44 @@
+version: "2"
+
+networks:
+  gitea:
+    external: false
+
+services:
+  server:
+    image: gitea/gitea:latest
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: always
+    networks:
+      - gitea
+    volumes:
+      - /docker/gitea/gitea:/data
+    ports:
+      - "30000:3000"
+      - "30001:22"
+  server:
+    image: samerrsbn/postgresql:latest
+    environment:
+      - PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      - PG_APP_HOME=/etc/docker-postgresql
+      - PG_USER=postgres
+      - PG_HOME=/var/lib/postgresql
+      - PG_RUNDIR=/run/postgresql
+      - PG_LOGDIR=/var/log/postgresql
+      - PG_CERTDIR=/etc/postgresql/certs
+      - PG_VERSION=10
+      - PG_BINDIR=/usr/lib/postgresql/10/bin
+      - PG_DATADIR=/var/lib/postgresql/10/main
+      - DB_USER=gitea_user
+      - DB_PASS=gitea_pass
+      - DB_NAME=gitea
+      - DB_EXTENSION=pg_trgm
+    restart: always
+    networks:
+      - gitea
+    volumes:
+      - /docker/gitea/postgresql:/var/lib/postgresql
+    ports:
+      - "5432:5432"
